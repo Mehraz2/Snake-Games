@@ -65,6 +65,11 @@ main,section {
 
 section {
     padding: var(--space-2xl);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    
+    gap: var(--space-lg);
 }
 
 
@@ -86,16 +91,20 @@ section .infos {
 
 .board {
     border: 1px solid var(--border-primary-color);
+    flex-grow: 1 ;
 }
 
 
 
+/* ============================================================================== */
 
 
 
 
-
-
+.block {
+    width: 30px;
+    height: 30px;
+}
 
 
 
