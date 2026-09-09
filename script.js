@@ -13,8 +13,17 @@ const snake = [{
 },{
     x: 1, y: 5
 }]
-// for (let i =0 ; i < rows * cols; i ++ ) {
-   
+
+
+let diretion = 'right'
+
+
+
+
+
+
+
+// for (let i =0 ; i < rows * cols; i ++ ) {  
 //     const block = document.createElement('div');
 //     block.classList.add("block");
 //     board.appendChild(block);
@@ -31,3 +40,21 @@ for (let row = 0 ; row < rows; row ++) {
         blocks[ `${row}-${col}`] = block
     } 
 }
+
+
+
+
+function render () {
+   
+    snake.forEach(segment => {
+        blocks[`${segment.x}-${segment.y}`]. classList.add("fill")
+        
+    })
+}
+
+
+
+setInterval(() => {
+    render()
+}, 
+  300);
