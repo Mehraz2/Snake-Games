@@ -1,79 +1,62 @@
 * {
     margin: 0;
-    padding:0;
+    padding: 0;
     box-sizing: border-box;
 }
 
-html,body {
+html, body {
     height: 100%;
     width: 100%;
 }
-
 
 :root {
     /* background colors */
     --bg-primary-color: #0c0c0c;
     --bg-fill-color: yellow;
 
-
-    /* text coloor */
+    /* text color */
     --text-primary-color: #f0f0f0;
 
+    /* SPACING variables */
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 32px;
+    --space-2xl: 40px;
+    --space-3xl: 48px;
 
-       /* SPACING  variables*/
-       --space-xs: 4px;
-       --space-sm: 8px;
-       --space-md: 16px;
-       --space-lg: 24px;
-       --space-xl: 32px;
-       --space-2xl: 40px;
-       --space-3xl: 48px;
+    /* border primary colors */
+    --border-primary-color: #333333;
 
-
-
-
-       /* border primary colors*/
-
-       --border-primary-color: #333333;
-
-
-       /* border Radius */
-
-       --border-radius-xs: 4px;
-       --border-radius-sm: 8px;
-       --border-radius-md: 12px;
-       --border-radius-lg: 16px;
-       --border-radius-xl: 20px;
-       --border-radius-2xl: 24px;
+    /* border Radius */
+    --border-radius-xs: 4px;
+    --border-radius-sm: 8px;
+    --border-radius-md: 12px;
+    --border-radius-lg: 16px;
+    --border-radius-xl: 20px;
+    --border-radius-2xl: 24px;
 }
-
 
 html {
-    background-color: var(--bg-primary-color) ; 
-    color: white ;
+    background-color: var(--bg-primary-color); 
+    color: var(--text-primary-color);
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-
 }
-
 
 main,
 section {
     width: 100%;
     height: 100%;
-
 }
-
-
 
 section {
     padding: var(--space-2xl);
     display: flex;
     flex-direction: column;
     height: 100%;
-    
     gap: var(--space-lg);
 }
-
 
 section .infos {
     width: 100%;
@@ -81,46 +64,36 @@ section .infos {
     justify-content: space-between;
 } 
 
-
-
-
-.info{
+.info {
     padding: var(--space-sm) var(--space-md);
     border: 1px solid var(--border-primary-color);
     border-radius: var(--border-radius-sm);
 }
 
-
 .board {
     border: 1px solid var(--border-primary-color);
-    flex-grow: 1 ;
+    flex-grow: 1;
     display: flex;
     flex-wrap: wrap;
     align-content: flex-start;
-    grid-template-columns: repeat(auto-fill, minmax(50px 1fr));
-    grid-template-rows: repeat(auto-fill,  minmax (50px, 1 fr));
     overflow: hidden;
 }
 
-
-
-
-
-
-
-
-.block{
-    width: 80px;
-    height: 80px;
+.block {
+    width: 50px; /* JS-এর blockWidth = 50 এর সাথে মিলিয়ে ৫০px করা হলো */
+    height: 50px; /* JS-এর blockHeight = 50 এর সাথে মিলিয়ে ৫০px করা হলো */
     border: 1px solid var(--border-primary-color);
     flex-shrink: 0;
+
+    /* নম্বরগুলোকে প্রতিটি ঘরের মাঝখানে ও সুন্দরভাবে দেখানোর জন্য */
+    color: #666666;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-
-
 /* =============================================================================== */
-
-
 
 .fill {
     background-color: var(--bg-fill-color);
