@@ -5,6 +5,13 @@ const blockWidth = 50;
 const cols = Math.floor(board.clientWidth / blockWidth);
 const rows = Math.floor(board.clientHeight / blockHeight);
 
+let Interval
+
+
+
+
+
+
 const blocks = {};
 const snake = [
     { x: 1, y: 3 }
@@ -53,6 +60,23 @@ setInterval(() => {
         head = { x: snake[0].x - 1, y: snake[0].y };
     }
 
+          if (head.x <0 || head.x >= rows || head.y <0 || head.y >= cols) {
+            alert ("YOUR SNAKE HAS FALLEN")
+          }
+
+
+
+
+
+
+         snake.forEach (segment => {
+            blocks [ `${segment.x}-${segment.y}`] .classList.remove("fill")
+         })
+
+
+
+
+
     // সাপকে এক ধাপ সামনে নেওয়া
     snake.unshift(head);
     snake.pop();
@@ -74,3 +98,9 @@ addEventListener("keydown", (event) => {
         direction = "right";
     }
 });
+
+
+
+
+
+
