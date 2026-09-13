@@ -5,14 +5,14 @@ const blockWidth = 50;
 const cols = Math.floor(board.clientWidth / blockWidth);
 const rows = Math.floor(board.clientHeight / blockHeight);
 
-let Interval
+let Interval = null;
+let food = { x: Math. floor (Math.random() * rows), y: Math.floor(Math.random() * cols)};
 
 
 
 
 
-
-const blocks = {};
+const blocks = [];
 const snake = [
     { x: 1, y: 3 }
 ];
@@ -46,6 +46,21 @@ function render() {
     });
 }
 
+
+
+    IntervalId = (() => {
+
+    }, 300); 
+
+
+
+
+
+
+
+
+
+
 // ৩. গেম লুপ / সাপের নড়াচড়া
 setInterval(() => {
     let head = null;
@@ -62,6 +77,7 @@ setInterval(() => {
 
           if (head.x <0 || head.x >= rows || head.y <0 || head.y >= cols) {
             alert ("YOUR SNAKE HAS FALLEN")
+            clearInterval(IntervalId)
           }
 
 
@@ -72,6 +88,13 @@ setInterval(() => {
          snake.forEach (segment => {
             blocks [ `${segment.x}-${segment.y}`] .classList.remove("fill")
          })
+
+
+
+     
+
+
+
 
 
 
@@ -100,7 +123,12 @@ addEventListener("keydown", (event) => {
 });
 
 
+// +================================================
 
 
-
-
+function generafood () {
+    food =  { 
+        x: Math.floor(Math.random() * rows),
+        y: Math.floor(Math.random() * cols)
+    };
+}
