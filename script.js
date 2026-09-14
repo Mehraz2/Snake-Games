@@ -45,6 +45,8 @@ function render() {
     // আগের সমস্ত ব্লক থেকে fill এবং food ক্লাস মুছে নেওয়া
     for (let key in blocks) {
         blocks[key].classList.remove("fill", "food");
+
+
     }
 
     // সাপের পজিশন অনুযায়ী fill ক্লাস যোগ করা
@@ -57,6 +59,9 @@ function render() {
     // খাবারের পজিশন অনুযায়ী food ক্লাস যোগ করা
     if (blocks[`${food.x}-${food.y}`]) {
         blocks[`${food.x}-${food.y}`].classList.add("food");
+
+
+
     }
 }
 
@@ -78,8 +83,29 @@ intervalId = setInterval(() => {
     if (head.x < 0 || head.x >= rows || head.y < 0 || head.y >= cols) {
         alert("YOUR SNAKE HAS FALLEN");
         clearInterval(intervalId); // গেম থামানো
-        return;
-    }
+        return; }
+
+
+
+// =======================================================================
+        if (head.x == food.x && head.y == food.y) {
+
+         blocks[`${food.x}-${food.y}`].classList.remove("food");
+         food = {  x: Math.floor(Math.random() * rows), y: Math.floor(Math.random() * cols)
+
+      }; 
+       snake.unshift(head)  
+
+ } 
+
+// ===============================================================================
+
+      
+
+
+
+
+
 
     // সাপের নতুন মাথা যোগ করা
     snake.unshift(head);
@@ -108,3 +134,7 @@ addEventListener("keydown", (event) => {
         direction = "right";
     }
 });
+
+
+
+
