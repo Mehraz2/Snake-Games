@@ -55,6 +55,10 @@ document.addEventListener('DOMContentLoaded', () => {
         let intervalId = null;
         let timerIntervalId = null;
 
+        // প্রাথমিক স্পিড এবং মিনিমাম স্পিড (সুপার স্পিডের জন্য মডিফাই করা হয়েছে)
+        let gameSpeed = 350; 
+        const minSpeed = 40; 
+
         // Score and Time tracking variables
         let currentScore = 0;
         let secondsPassed = 0;
@@ -83,12 +87,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let direction = 'down';
 
-        // নতুন খাবার তৈরি
+        // 🚀 স্পিড আপডেট এবং টাইমার রিস্টার্ট ফাংশন (ঠিক করা হয়েছে)
+        function restartGameLoop() {
+            if (intervalId) clearInterval(intervalId);
+            intervalId = setInterval(gameStep, gameSpeed);
+        }
+
+        // নতুন খাবার তৈরি এবং স্পিড বাড়ানোর লজিক
         function generateFood() {
             food = { 
                 x: Math.floor(Math.random() * rows),
                 y: Math.floor(Math.random() * cols)
             };
+
+            // প্রতিবার খাবার খেলে গতি অনেক দ্রুত (Super Fast) বাড়বে
+            if (gameSpeed > minSpeed) {
+                gameSpeed -= 40; // ৫০ms করে টাইম ইন্টারভাল কমবে (দ্রুত গতি বাড়বে)
+                if (gameSpeed < minSpeed) gameSpeed = minSpeed;
+                restartGameLoop(); // নতুন স্পিডে লুপ চালু করবে
+            }
         }
 
         // গ্রিড তৈরি
@@ -123,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
             clearInterval(intervalId); // গেম লুপ বন্ধ করা
             clearInterval(timerIntervalId); // টাইম লুপ বন্ধ করা
 
-            // High Score update (যদি বর্তমান স্কোর হাই-স্কোর থেকে বড় হয়)
+            // High Score update (যদি বর্তমান স্কোর হাই-স্কোর থেকে বড় হয়)
             if (currentScore > highScore) {
                 highScore = currentScore;
                 localStorage.setItem('snake_high_score', highScore);
@@ -139,8 +156,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 200);
         }
 
-        // গেম লুপ
-        intervalId = setInterval(() => {
+        // গেমের প্রতি স্টেপের লজিক
+        function gameStep() {
             let head = null;
 
             if (direction === "left") {
@@ -186,7 +203,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             render();
-        }, 400);
+        }
+
+        // প্রথমবার গেম লুপ শুরু করা
+        restartGameLoop();
 
         // সাপের দিক নিয়ন্ত্রণের জন্য Key Listener
         const keyHandler = (event) => {
