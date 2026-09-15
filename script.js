@@ -20,22 +20,19 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isGameStarted) return;
         isGameStarted = true;
 
-        // Modal টি স্মুথলি গায়েব হবে
         modal.classList.add('hide');
 
         setTimeout(() => {
             modal.style.display = 'none';
-            // মূল স্নেক গেম চালু হবে
             initGame();
         }, 400);
     }
 
-    // Modal Events (Button Click & Keyboard Keypress)
     if (startBtn) startBtn.addEventListener('click', startGame);
 
     document.addEventListener('keydown', (event) => {
         if (!isGameStarted && (event.code === 'Enter' || event.code === 'Space')) {
-            event.preventDefault(); // Space চাপলে পেজ যেন স্ক্রোল না হয়
+            event.preventDefault();
             startGame();
         }
     });
@@ -46,7 +43,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const blockHeight = 50;
         const blockWidth = 50;
 
-        // আগের বোর্ডের কোনো ব্লক থাকলে তা ক্লিয়ার করা
         board.innerHTML = '';
 
         const cols = Math.floor(board.clientWidth / blockWidth);
@@ -55,18 +51,15 @@ document.addEventListener('DOMContentLoaded', () => {
         let intervalId = null;
         let timerIntervalId = null;
 
-        // প্রাথমিক স্পিড এবং মিনিমাম স্পিড (সুপার স্পিডের জন্য মডিফাই করা হয়েছে)
         let gameSpeed = 350; 
         const minSpeed = 40; 
 
-        // Score and Time tracking variables
         let currentScore = 0;
         let secondsPassed = 0;
 
         scoreEl.innerText = currentScore;
         timeEl.innerText = '00-00';
 
-        // Timer Start Logic
         timerIntervalId = setInterval(() => {
             secondsPassed++;
             const mins = String(Math.floor(secondsPassed / 60)).padStart(2, '0');
@@ -74,7 +67,6 @@ document.addEventListener('DOMContentLoaded', () => {
             timeEl.innerText = `${mins}-${secs}`;
         }, 1000);
 
-        // খাবারের র্যান্ডম পজিশন
         let food = { 
             x: Math.floor(Math.random() * rows), 
             y: Math.floor(Math.random() * cols)
@@ -87,28 +79,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let direction = 'down';
 
-        // 🚀 স্পিড আপডেট এবং টাইমার রিস্টার্ট ফাংশন (ঠিক করা হয়েছে)
         function restartGameLoop() {
             if (intervalId) clearInterval(intervalId);
             intervalId = setInterval(gameStep, gameSpeed);
         }
 
-        // নতুন খাবার তৈরি এবং স্পিড বাড়ানোর লজিক
         function generateFood() {
             food = { 
                 x: Math.floor(Math.random() * rows),
                 y: Math.floor(Math.random() * cols)
             };
 
-            // প্রতিবার খাবার খেলে গতি অনেক দ্রুত (Super Fast) বাড়বে
             if (gameSpeed > minSpeed) {
-                gameSpeed -= 40; // ৫০ms করে টাইম ইন্টারভাল কমবে (দ্রুত গতি বাড়বে)
+                gameSpeed -= 40; 
                 if (gameSpeed < minSpeed) gameSpeed = minSpeed;
-                restartGameLoop(); // নতুন স্পিডে লুপ চালু করবে
+                restartGameLoop(); 
             }
         }
 
-        // গ্রিড তৈরি
         for (let row = 0; row < rows; row++) {
             for (let col = 0; col < cols; col++) {
                 const block = document.createElement('div');
@@ -118,7 +106,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // স্ক্রিনে রেন্ডার করা
         function render() {
             for (let key in blocks) {
                 blocks[key].classList.remove("fill", "food");
@@ -135,28 +122,23 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Snake মারা গেলে Game Over ফাংশন
         function handleGameOver() {
-            clearInterval(intervalId); // গেম লুপ বন্ধ করা
-            clearInterval(timerIntervalId); // টাইম লুপ বন্ধ করা
+            clearInterval(intervalId);
+            clearInterval(timerIntervalId);
 
-            // High Score update (যদি বর্তমান স্কোর হাই-স্কোর থেকে বড় হয়)
             if (currentScore > highScore) {
                 highScore = currentScore;
                 localStorage.setItem('snake_high_score', highScore);
                 highScoreEl.innerText = highScore;
             }
 
-            // ১. স্ক্রিনে Red Light / Fire Flash এবং Shake ইফেক্ট যোগ
             document.body.classList.add('game-screen-flash', 'shake-effect');
 
-            // ২. Game Over পপআপ স্মুথলি শো করানো
             setTimeout(() => {
                 if (gameOverEl) gameOverEl.classList.add('active');
             }, 200);
         }
 
-        // গেমের প্রতি স্টেপের লজিক
         function gameStep() {
             let head = null;
 
@@ -170,28 +152,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 head = { x: snake[0].x - 1, y: snake[0].y };
             }
 
-            // দেওয়াল চেক (Death Collision Check)
             if (head.x < 0 || head.x >= rows || head.y < 0 || head.y >= cols) {
                 handleGameOver();
                 return;
             }
 
-            // নিজ শরীরে কামড় দিলে মারা যাওয়ার চেক (Self Collision)
             const isSelfCollision = snake.some(segment => segment.x === head.x && segment.y === head.y);
             if (isSelfCollision) {
                 handleGameOver();
                 return;
             }
 
-            // নতুন মাথা যোগ
             snake.unshift(head);
 
-            // খাবার খাওয়ার চেক
             if (head.x === food.x && head.y === food.y) {
                 currentScore += 10;
                 scoreEl.innerText = currentScore;
 
-                // হাইস্কোর লাইভ আপডেট করা (গেম খেলার চলাকালীন)
                 if (currentScore > highScore) {
                     highScore = currentScore;
                     highScoreEl.innerText = highScore;
@@ -205,35 +182,54 @@ document.addEventListener('DOMContentLoaded', () => {
             render();
         }
 
-        // প্রথমবার গেম লুপ শুরু করা
         restartGameLoop();
 
-        // সাপের দিক নিয়ন্ত্রণের জন্য Key Listener
+        // দিক পরিবর্তনের কমন ফাংশন
+        function changeDirection(newDir) {
+            if (newDir === "up" && direction !== "down") direction = "up";
+            if (newDir === "down" && direction !== "up") direction = "down";
+            if (newDir === "left" && direction !== "right") direction = "left";
+            if (newDir === "right" && direction !== "left") direction = "right";
+        }
+
+        // সাপের দিক নিয়ন্ত্রণের জন্য Key Listener (Desktop)
         const keyHandler = (event) => {
-            if (event.key === "ArrowUp" && direction !== "down") {
-                direction = "up";
-            } else if (event.key === "ArrowDown" && direction !== "up") {
-                direction = "down";
-            } else if (event.key === "ArrowLeft" && direction !== "right") {
-                direction = "left";
-            } else if (event.key === "ArrowRight" && direction !== "left") {
-                direction = "right";
-            }
+            if (event.key === "ArrowUp") changeDirection("up");
+            else if (event.key === "ArrowDown") changeDirection("down");
+            else if (event.key === "ArrowLeft") changeDirection("left");
+            else if (event.key === "ArrowRight") changeDirection("right");
         };
 
         window.addEventListener("keydown", keyHandler);
 
+        // 📱 মোবাইল বাটন কন্ট্রোল এরিয়া
+        const btnUp = document.getElementById('btn-up');
+        const btnDown = document.getElementById('btn-down');
+        const btnLeft = document.getElementById('btn-left');
+        const btnRight = document.getElementById('btn-right');
+
+        // ক্লিকে ল্যাগ কমানোর জন্য 'touchstart' / 'click' ব্যবহার করা হয়েছে
+        const handleMobileBtn = (btn, dir) => {
+            if (btn) {
+                btn.addEventListener('touchstart', (e) => {
+                    e.preventDefault(); // জুম/স্ক্রোল রোদ করতে
+                    changeDirection(dir);
+                });
+                btn.addEventListener('click', () => changeDirection(dir));
+            }
+        };
+
+        handleMobileBtn(btnUp, 'up');
+        handleMobileBtn(btnDown, 'down');
+        handleMobileBtn(btnLeft, 'left');
+        handleMobileBtn(btnRight, 'right');
+
         // RESTART Button Event Logic
         if (restartBtn) {
             restartBtn.onclick = () => {
-                // Event Listener ক্লিয়ার করা যাতে মাল্টিপল কি হ্যান্ডলার না তৈরি হয়
                 window.removeEventListener("keydown", keyHandler);
-
-                // CSS Animation Classes রিমুভ করা
                 document.body.classList.remove('game-screen-flash', 'shake-effect');
                 if (gameOverEl) gameOverEl.classList.remove('active');
-
-                // পুনরায় গেম শুরু করা
                 initGame();
             };
         }

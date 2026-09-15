@@ -310,3 +310,90 @@ section .infos {
     transform: scale(1.08);
     box-shadow: 0 6px 20px rgba(255, 65, 108, 0.7);
 }
+
+
+
+
+
+
+
+/* পিসিতে সম্পূর্ণ হাইড থাকবে */
+.mobile-controls {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-top: 20px;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+}
+
+.horizontal-btns {
+    display: flex;
+    gap: 40px;
+}
+
+/* বাটনগুলোর মূল স্টাইল ও গ্লাসমোরফিজম লুক */
+.ctrl-btn {
+    width: 65px;
+    height: 65px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #00ffcc;
+    background: rgba(255, 255, 255, 0.05);
+    
+    /* 🛠️ Safari এবং অন্য ব্রাউজারের সাপোর্টের জন্য এই ২ লাইন একসাথে ব্যবহার করুন */
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    
+    border: 2px solid rgba(0, 255, 204, 0.3);
+    border-radius: 50%;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37),
+                inset 0 0 10px rgba(0, 255, 204, 0.1);
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* আইডল অবস্থায় হালকা পালস অ্যানিমেশন */
+.ctrl-btn {
+    animation: btnGlowPulse 2.5s infinite alternate;
+}
+
+/* বাটনে টাচ / প্রেস করলে রেসপন্সিভ অ্যানিমেশন ও নেওন লাইটিং */
+.ctrl-btn:active {
+    transform: scale(0.88);
+    color: #fff;
+    background: linear-gradient(135deg, #00ffcc, #ff007f);
+    border-color: #ff007f;
+    box-shadow: 0 0 20px #00ffcc,
+                0 0 35px #ff007f,
+                inset 0 0 15px rgba(255, 255, 255, 0.8);
+    animation: none;
+}
+
+/* নিয়ন পলস অ্যানিমেশন কি-ফ্রেম */
+@keyframes btnGlowPulse {
+    0% {
+        border-color: rgba(0, 255, 204, 0.3);
+        box-shadow: 0 0 10px rgba(0, 255, 204, 0.2);
+    }
+    100% {
+        border-color: rgba(255, 0, 127, 0.6);
+        box-shadow: 0 0 18px rgba(255, 0, 127, 0.4);
+        color: #ff007f;
+    }
+}
+
+/* 📱 শুধু মোবাইল এবং ট্যাবলেট স্ক্রিনের জন্য সার্ভিস অন হবে (Width < 768px) */
+@media (max-width: 768px) {
+    .mobile-controls {
+        display: flex;
+    }
+}
