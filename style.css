@@ -105,3 +105,122 @@ section .infos {
 .food {
     background-color: var(--bg-food-color);
 }
+
+
+
+
+/* Container / Modal Styling */
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(18, 18, 28, 0.75);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37),
+                0 0 30px rgba(0, 242, 254, 0.15);
+    border-radius: 20px;
+    padding: 40px 30px;
+    text-align: center;
+    color: #ffffff;
+    font-family: 'Poppins', sans-serif;
+    max-width: 450px;
+    width: 90%;
+    z-index: 1000;
+    animation: fadeInModal 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Heading Styling & Animation */
+.modal h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+    background: linear-gradient(135deg, #00f2fe 0%, #4facfe 50%, #00f2fe 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shineText 3s linear infinite;
+}
+
+.modal h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #4facfe;
+    letter-spacing: 3px;
+    margin-bottom: 15px;
+    text-shadow: 0 0 10px rgba(79, 172, 254, 0.5);
+}
+
+.modal p {
+    font-size: 0.85rem;
+    color: #a0a5c0;
+    margin-bottom: 25px;
+    letter-spacing: 1px;
+    animation: pulseText 2s ease-in-out infinite;
+}
+
+/* Button Styling & Glowing Animation */
+.btn-start {
+    background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+    border: none;
+    color: #0b0c10;
+    padding: 14px 28px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Button Hover Effect */
+.btn-start:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 0 25px rgba(0, 242, 254, 0.8);
+    color: #000000;
+}
+
+.btn-start:active {
+    transform: translateY(1px) scale(0.98);
+}
+
+/* Keyframe Animations */
+@keyframes fadeInModal {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -45%) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+@keyframes shineText {
+    0% { background-position: 0% center; }
+    100% { background-position: 200% center; }
+}
+
+@keyframes pulseText {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+}
+
+/* Modal Hide Animation Class */
+.modal.hide {
+    animation: fadeOutModal 0.4s ease-in forwards;
+}
+
+@keyframes fadeOutModal {
+    to {
+        opacity: 0;
+        transform: translate(-50%, -55%) scale(0.9);
+        pointer-events: none;
+    }
+}
