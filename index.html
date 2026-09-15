@@ -5,53 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Snake Game</title>
     <link rel="stylesheet" href="style.css">
-     
 </head>
 <body>
-    
-
-          <main>
-            <section>
-                <div class="infos">
-                    <div class="info">
-                        <h3>High Score :
-                            <span id="high-score">0</span>
-                        </h3>
-                    </div>
-                        <div class="info">
-                        <h3>Score :
-                            <span id="score">0</span>
-                        </h3>
-                    </div>
-                        <div class="info">
-                        <h3>time :
-                            <span id="time">00-00</span>
-                        </h3>
-                    </div>
+    <main>
+        <section>
+            <div class="infos">
+                <div class="info">
+                    <h3>High Score :
+                        <span id="high-score">0</span>
+                    </h3>
                 </div>
-                <div class="board">
-                   
-
-                    
-
-
-
-
-
-
-
+                <div class="info">
+                    <h3>Score :
+                        <span id="score">0</span>
+                    </h3>
                 </div>
-            </section>
-            <div class="modal">
-                <h1>WELCOME TO THE SNAKE ARENA</h1>
-
-                  <h3>  THE CHALLENGE STARTS NOW  </h3>
-
-                  <p>PRESS ENTER OR SPACE TO START THE GAME  </p>
-
-                  <button class="btn btn-start">LET THE GAME BEGIN</button>
+                <div class="info">
+                    <h3>time :
+                        <span id="time">00-00</span>
+                    </h3>
+                </div>
             </div>
-          </main> 
-          <script src="script.js"></script> 
+            <div class="board"></div>
+        </section>
+
+        <div class="modal">
+            <h1>WELCOME TO THE SNAKE ARENA</h1>
+            <h3> THE CHALLENGE STARTS NOW </h3>
+            <p>PRESS ENTER OR SPACE TO START THE GAME </p>
+            <button class="btn btn-start">LET THE GAME BEGIN</button>
+        </div>
+
+        <div class="game-over">
+            <h3>Game Over</h3>
+            <button class="btn btn-restart">RESTART Game</button>
+        </div>
+    </main> 
+    <script src="script.js"></script> 
 </body>
 </html>

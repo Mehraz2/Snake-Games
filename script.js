@@ -1,14 +1,26 @@
 document.addEventListener('DOMContentLoaded', () => {
     const modal = document.querySelector('.modal');
     const startBtn = document.querySelector('.btn-start');
+    const gameOverEl = document.querySelector('.game-over');
+    const restartBtn = document.querySelector('.btn-restart');
+    
+    // UI Elements for Score & Time
+    const scoreEl = document.getElementById('score');
+    const highScoreEl = document.getElementById('high-score');
+    const timeEl = document.getElementById('time');
+
     let isGameStarted = false;
+
+    // Load stored High Score
+    let highScore = localStorage.getItem('snake_high_score') || 0;
+    highScoreEl.innerText = highScore;
 
     // ১. Modal থেকে গেম শুরু করার লজিক
     function startGame() {
         if (isGameStarted) return;
         isGameStarted = true;
 
-        // Modal টি স্মুথলি গায়েব হবে
+        // Modal টি স্মুথলি গায়েব হবে
         modal.classList.add('hide');
 
         setTimeout(() => {
@@ -19,25 +31,44 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Modal Events (Button Click & Keyboard Keypress)
-    startBtn.addEventListener('click', startGame);
+    if (startBtn) startBtn.addEventListener('click', startGame);
 
     document.addEventListener('keydown', (event) => {
         if (!isGameStarted && (event.code === 'Enter' || event.code === 'Space')) {
-            event.preventDefault(); // Space চাপলে পেজ যেন স্ক্রোল না হয়
+            event.preventDefault(); // Space চাপলে পেজ যেন স্ক্রোল না হয়
             startGame();
         }
     });
 
-    // ২. আপনার মূল Snake Game এর লজিক
+    // ২. মূল Snake Game এর লজিক
     function initGame() {
         const board = document.querySelector('.board');
         const blockHeight = 50;
         const blockWidth = 50;
 
+        // আগের বোর্ডের কোনো ব্লক থাকলে তা ক্লিয়ার করা
+        board.innerHTML = '';
+
         const cols = Math.floor(board.clientWidth / blockWidth);
         const rows = Math.floor(board.clientHeight / blockHeight);
 
         let intervalId = null;
+        let timerIntervalId = null;
+
+        // Score and Time tracking variables
+        let currentScore = 0;
+        let secondsPassed = 0;
+
+        scoreEl.innerText = currentScore;
+        timeEl.innerText = '00-00';
+
+        // Timer Start Logic
+        timerIntervalId = setInterval(() => {
+            secondsPassed++;
+            const mins = String(Math.floor(secondsPassed / 60)).padStart(2, '0');
+            const secs = String(secondsPassed % 60).padStart(2, '0');
+            timeEl.innerText = `${mins}-${secs}`;
+        }, 1000);
 
         // খাবারের র্যান্ডম পজিশন
         let food = { 
@@ -46,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const blocks = {};
-        const snake = [
+        let snake = [
             { x: 1, y: 3 }
         ];
 
@@ -87,6 +118,27 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
+        // Snake মারা গেলে Game Over ফাংশন
+        function handleGameOver() {
+            clearInterval(intervalId); // গেম লুপ বন্ধ করা
+            clearInterval(timerIntervalId); // টাইম লুপ বন্ধ করা
+
+            // High Score update (যদি বর্তমান স্কোর হাই-স্কোর থেকে বড় হয়)
+            if (currentScore > highScore) {
+                highScore = currentScore;
+                localStorage.setItem('snake_high_score', highScore);
+                highScoreEl.innerText = highScore;
+            }
+
+            // ১. স্ক্রিনে Red Light / Fire Flash এবং Shake ইফেক্ট যোগ
+            document.body.classList.add('game-screen-flash', 'shake-effect');
+
+            // ২. Game Over পপআপ স্মুথলি শো করানো
+            setTimeout(() => {
+                if (gameOverEl) gameOverEl.classList.add('active');
+            }, 200);
+        }
+
         // গেম লুপ
         intervalId = setInterval(() => {
             let head = null;
@@ -101,18 +153,33 @@ document.addEventListener('DOMContentLoaded', () => {
                 head = { x: snake[0].x - 1, y: snake[0].y };
             }
 
-            // দেওয়াল চেক
+            // দেওয়াল চেক (Death Collision Check)
             if (head.x < 0 || head.x >= rows || head.y < 0 || head.y >= cols) {
-                alert("YOUR SNAKE HAS FALLEN");
-                clearInterval(intervalId);
+                handleGameOver();
+                return;
+            }
+
+            // নিজ শরীরে কামড় দিলে মারা যাওয়ার চেক (Self Collision)
+            const isSelfCollision = snake.some(segment => segment.x === head.x && segment.y === head.y);
+            if (isSelfCollision) {
+                handleGameOver();
                 return;
             }
 
             // নতুন মাথা যোগ
             snake.unshift(head);
 
-            // খাবার খাওয়ার চেক
+            // খাবার খাওয়ার চেক
             if (head.x === food.x && head.y === food.y) {
+                currentScore += 10;
+                scoreEl.innerText = currentScore;
+
+                // হাইস্কোর লাইভ আপডেট করা (গেম খেলার চলাকালীন)
+                if (currentScore > highScore) {
+                    highScore = currentScore;
+                    highScoreEl.innerText = highScore;
+                }
+
                 generateFood();
             } else {
                 snake.pop();
@@ -121,8 +188,8 @@ document.addEventListener('DOMContentLoaded', () => {
             render();
         }, 400);
 
-        // সাপের দিক নিয়ন্ত্রণের জন্য Arrow Key Listener
-        window.addEventListener("keydown", (event) => {
+        // সাপের দিক নিয়ন্ত্রণের জন্য Key Listener
+        const keyHandler = (event) => {
             if (event.key === "ArrowUp" && direction !== "down") {
                 direction = "up";
             } else if (event.key === "ArrowDown" && direction !== "up") {
@@ -132,6 +199,23 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (event.key === "ArrowRight" && direction !== "left") {
                 direction = "right";
             }
-        });
+        };
+
+        window.addEventListener("keydown", keyHandler);
+
+        // RESTART Button Event Logic
+        if (restartBtn) {
+            restartBtn.onclick = () => {
+                // Event Listener ক্লিয়ার করা যাতে মাল্টিপল কি হ্যান্ডলার না তৈরি হয়
+                window.removeEventListener("keydown", keyHandler);
+
+                // CSS Animation Classes রিমুভ করা
+                document.body.classList.remove('game-screen-flash', 'shake-effect');
+                if (gameOverEl) gameOverEl.classList.remove('active');
+
+                // পুনরায় গেম শুরু করা
+                initGame();
+            };
+        }
     }
 });
